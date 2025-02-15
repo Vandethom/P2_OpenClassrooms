@@ -1,4 +1,4 @@
 export interface DataCard {
-    name: string;
+    name : string;
     value: number;
   }
