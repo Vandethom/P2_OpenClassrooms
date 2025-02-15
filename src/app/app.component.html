@@ -1,1 +1,9 @@
 <router-outlet></router-outlet>
+
+<app-title-card [title]="cardTitle" />
+<div class="data-card-container">
+    <app-data-card *ngFor="let card of dataCards"  
+                     [name]="card.name"
+                    [value]="card.value" 
+     />
+</div>
