@@ -4,6 +4,7 @@ import { OlympicService }        from './core/services/olympic.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { DataCard }              from './core/models/DataCard';
 import { Participation }         from './core/models/Participation';
+import { Olympic }               from './core/models/Olympic';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private updateDataCards(olympics: any[]): void {
+  private updateDataCards(olympics: Olympic[]): void {
     if (this.router.url === '/') {
       this.updateDataCardsForHome(olympics)
     } else if (this.router.url.includes('/detail')) {
@@ -48,7 +49,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private updateDataCardsForHome(olympics: any[]): void {
+  private updateDataCardsForHome(olympics: Olympic[]): void {
     const distinctYears = new Set<number>();
     olympics.forEach(country => {
       country.participations.forEach((participation: Participation) => {
@@ -62,22 +63,23 @@ export class AppComponent implements OnInit {
     ];
   }
 
-  private updateDataCardsForDetail(olympics: any[]): void {
+  private updateDataCardsForDetail(olympics: Olympic[]): void {
     const countryId       = parseInt(this.router.url.split('/')[2], 10)
     const selectedCountry = olympics.find(country => country.id === countryId)
-    const totalEntries    = selectedCountry.participations.length
-    let   totalAthletes   = 0
-    let   totalMedals     = 0
     
     if (selectedCountry) {
+      const totalEntries  = selectedCountry.participations.length
+      let totalAthletes   = 0
+      let totalMedals     = 0
+  
       selectedCountry.participations.forEach((participation: Participation) => {
         totalMedals += participation.medalsCount
       })
-
+  
       selectedCountry.participations.forEach((participation: Participation) => {
         totalAthletes += participation.athleteCount
       })
-
+  
       this.dataCards = [
         { name: 'Number of entries'       , value: totalEntries },
         { name: 'Total Number of medals'  , value: totalMedals },
