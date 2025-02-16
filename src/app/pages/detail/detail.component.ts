@@ -47,8 +47,9 @@ export class DetailComponent implements OnInit {
         if (country) {
           this.cardTitle = country.country;
           this.dataCards = [
-            { name: 'Total Medals',   value: country.participations.reduce((sum: number, p: any) => sum + p.medalsCount,  0) },
-            { name: 'Total Athletes', value: country.participations.reduce((sum: number, p: any) => sum + p.athleteCount, 0) }
+            { name: 'Number of entries', value: country.participations.length },
+            { name: 'Total Medals',      value: country.participations.reduce((sum: number, p: any) => sum + p.medalsCount,  0) },
+            { name: 'Total Athletes',    value: country.participations.reduce((sum: number, p: any) => sum + p.athleteCount, 0) }
           ]
           this.lineChartData = [
             {
