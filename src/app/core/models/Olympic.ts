@@ -1,4 +1,4 @@
-export interface OlympicCountry {
+export interface Olympic {
     id            : number
     country       : string
     participations: any[]

@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+.data-card-container {
+    margin-top     : 15px;
+    display        : flex;
+    justify-content: center;
+    gap            : 40px;
+}
+
+.chart-container {
+    display        : flex;
+    margin-top     : 20px;
+    justify-content: center;
+    align-items    : center;
+    height         : 100%;
+    width          : 100%;
+}
