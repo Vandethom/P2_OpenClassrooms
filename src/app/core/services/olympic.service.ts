@@ -52,16 +52,6 @@ export class OlympicService {
   getNumberOfCountries(): number {
     return this.olympics.length
   }
-
-  getPieChartData(): { name: string; value: number }[] {
-    return this.olympics.map((country) => ({
-      name: country.country,
-      value: country.participations.reduce(
-        (sum: number, p: { medalsCount: number }) => sum + p.medalsCount,
-        0
-      ),
-    }))
-  }
   
   getCountryById(countryId: number): Observable<Country | undefined> {
     return this.http.get<Country[]>(this.olympicUrl).pipe(

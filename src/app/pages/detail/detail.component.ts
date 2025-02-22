@@ -1,12 +1,16 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CommonModule }              from '@angular/common';
-import { LineChartComponent }        from 'src/app/line-chart/line-chart.component';
-import { TitleCardComponent }        from 'src/app/title-card/title-card.component';
-import { DataCardComponent }         from 'src/app/data-card/data-card.component';
-import { ActivatedRoute, Router }    from '@angular/router';
-import { OlympicService }            from 'src/app/core/services/olympic.service';
-import { Country }                   from 'src/app/core/models/Country';
-import { Participation }             from 'src/app/core/models/Participation';
+import { Component, 
+         EventEmitter, 
+         OnInit, 
+         Output }                 from '@angular/core'
+import { CommonModule }           from '@angular/common'
+import { LineChartComponent }     from 'src/app/line-chart/line-chart.component'
+import { TitleCardComponent }     from 'src/app/title-card/title-card.component'
+import { DataCardComponent }      from 'src/app/data-card/data-card.component'
+import { ActivatedRoute, Router } from '@angular/router'
+import { OlympicService }         from 'src/app/core/services/olympic.service'
+import { DetailService }          from 'src/app/core/services/detail.service'
+import { Country }                from 'src/app/core/models/Country'
+import { Participation }          from 'src/app/core/models/Participation'
 
 @Component({
   selector: 'app-detail',
@@ -32,7 +36,7 @@ export class DetailComponent implements OnInit {
 
   constructor(
     private route          : ActivatedRoute, 
-    private olympicService : OlympicService
+    private detailService  : DetailService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +48,7 @@ export class DetailComponent implements OnInit {
 
   private loadCountryData(): void {
     if (this.countryId !== null) {
-      this.olympicService.getCountryById(this.countryId).subscribe(country => {
+      this.detailService.getCountryById(this.countryId).subscribe(country => {
         if (country) {
           this.cardTitle = country.country;
           this.dataCards = [

@@ -108,7 +108,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onBack(): void {
-    this.router.navigate(['/']);
+  onCountrySelected(countryId: number): void {
+    this.router.navigate([`/detail/${countryId}`]);
   }
 }
