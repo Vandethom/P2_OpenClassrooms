@@ -1,31 +1,75 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { HttpClient }                      from '@angular/common/http'
+import { Injectable }                      from '@angular/core'
+import { BehaviorSubject, Observable, of } from 'rxjs'
+import { catchError, tap, map }            from 'rxjs/operators'
+import { Olympic }                         from '../models/Olympic'
+import { Participation }                   from '../models/Participation'
+import { Country }                         from '../models/Country'
 
 @Injectable({
   providedIn: 'root',
 })
 export class OlympicService {
-  private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+  private olympicUrl: string    = './assets/mock/olympic.json'
+  private olympics$             = new BehaviorSubject<Olympic[] | null>(null)
+  private olympics  : Olympic[] = []
 
   constructor(private http: HttpClient) {}
 
-  loadInitialData() {
-    return this.http.get<any>(this.olympicUrl).pipe(
-      tap((value) => this.olympics$.next(value)),
+  loadInitialData(): Observable<Olympic[]> {
+    return this.http.get<Olympic[]>(this.olympicUrl).pipe(
+      tap((olympics) => {
+        this.olympics = olympics
+        this.olympics$.next(olympics)
+      }),
       catchError((error, caught) => {
-        // TODO: improve error handling
-        console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next(null);
-        return caught;
+        console.error(error)
+        this.setOlympicsData(null)
+
+        return of([])
       })
     );
   }
 
-  getOlympics() {
-    return this.olympics$.asObservable();
+  getOlympics(): Observable<Olympic[] | null> {
+    return this.olympics$.asObservable()
+  }
+
+  setOlympicsData(olympics: Olympic[] | null): void {
+    this.olympics$.next(olympics)
+  }
+
+  getNumberOfJos(): number {
+    const distinctYears = new Set<number>()
+    this.olympics.forEach((country) => {
+      country.participations.forEach((participation: Participation) => {
+        distinctYears.add(participation.year)
+      })
+    })
+    return distinctYears.size
+  }
+
+  getNumberOfCountries(): number {
+    return this.olympics.length
+  }
+
+  getPieChartData(): { name: string; value: number }[] {
+    return this.olympics.map((country) => ({
+      name: country.country,
+      value: country.participations.reduce(
+        (sum: number, p: { medalsCount: number }) => sum + p.medalsCount,
+        0
+      ),
+    }))
+  }
+  
+  getCountryById(countryId: number): Observable<Country | undefined> {
+    return this.http.get<Country[]>(this.olympicUrl).pipe(
+      map((countries) => countries.find((country) => country.id === countryId)),
+      catchError((error, caught) => {
+        console.error(error)
+        return of(undefined)
+      })
+    )
   }
 }

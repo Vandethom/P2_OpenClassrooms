@@ -8,21 +8,23 @@ import { TitleCardComponent } from "./title-card/title-card.component";
 import { DataCardComponent }  from './data-card/data-card.component';
 import { PieChartComponent }  from './pie-chart/pie-chart.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { DetailComponent }    from "./pages/detail/detail.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent
                 ],
-  imports     : [
-    BrowserModule, 
-    AppRoutingModule, 
-    HttpClientModule, 
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
     TitleCardComponent,
     DataCardComponent,
     PieChartComponent,
-    LineChartComponent
-                ],
+    LineChartComponent,
+    DetailComponent
+],
   providers   : [],
   bootstrap   : [AppComponent],
 })
