@@ -1,4 +1,4 @@
-<app-title-card title="Name of the country"></app-title-card>
+<app-title-card [title]="countryName"></app-title-card>
 <div class="data-card-container">
   <app-data-card *ngFor="let card of dataCards" 
                  [name]="card.name" 

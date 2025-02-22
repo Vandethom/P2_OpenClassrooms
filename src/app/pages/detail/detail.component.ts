@@ -15,20 +15,21 @@ import { DataCard }               from 'src/app/core/models/DataCard'
 import { LineChartData }          from 'src/app/core/models/LineChartData'
 
 @Component({
-  selector: 'app-detail',
+  selector  : 'app-detail',
   standalone: true,
-  imports: [
+  imports   : [
     CommonModule, 
     LineChartComponent, 
     TitleCardComponent, 
     DataCardComponent
   ],
   templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss'],
+  styleUrls  : ['./detail.component.scss'],
+  providers  : [DetailService]
 })
 export class DetailComponent implements OnInit {
   @Output() back         : EventEmitter<void> = new EventEmitter<void>()
-  public    cardTitle    : string             = 'Name of the country'
+  public    countryName  : string             = null!
   public    dataCards    : DataCard[]         = []
   public    dataLoaded   : boolean            = false
   private   countryId    : number | null      = null
@@ -49,34 +50,14 @@ export class DetailComponent implements OnInit {
 
   private loadCountryData(): void {
     if (this.countryId !== null) {
-      this.detailService.getCountryById(this.countryId).subscribe(country => {
+      this.detailService.getCountryById(this.countryId).subscribe(
+        (country: Country | undefined) => {
         if (country) {
-          this.cardTitle = country.country
-          this.dataCards = [
-            { name: 'Number of entries', value: country.participations.length },
-            { name: 'Total Medals',      value: country.participations.reduce(
-              (sum: number, participation: Participation) => sum + participation.medalsCount,  0) },
-            { name: 'Total Athletes',    value: country.participations.reduce(
-              (sum: number, participation: Participation) => sum + participation.athleteCount, 0) }
-          ]
-          this.lineChartData = [
-            {
-              name   : 'Medals',
-              series : country.participations.map((participation: Participation) => ({
-                name : participation.year.toString(),
-                value: participation.medalsCount
-              }))
-            },
-            {
-              name   : 'Athletes',
-              series : country.participations.map(
-                (participation: Participation) => ({
-                  name : participation.year.toString(),
-                  value: participation.athleteCount
-              }))
-            }
-          ];
-          this.dataLoaded = true
+          this.countryName = country.country
+          const transformedData = this.detailService.formatCountryData(country)
+          this.dataCards = transformedData.dataCards
+          this.lineChartData = transformedData.lineChartData
+          this.dataLoaded = true;
         }
       })
     }
