@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Component, Input } from '@angular/core'
+import { CommonModule }     from '@angular/common'
+import { NgxChartsModule }  from '@swimlane/ngx-charts'
+import { LineChartData }    from '../core/models/LineChartData'
 
 @Component({
   selector: 'app-line-chart',
@@ -13,5 +14,5 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   styleUrls  : ['./line-chart.component.scss']
 })
 export class LineChartComponent {
-  @Input() data: { name: string, series: { name: string, value: number }[] }[] = [];
+  @Input() data: LineChartData[] = []
 }

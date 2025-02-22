@@ -16,8 +16,8 @@ export class DetailService {
     return this.http.get<Country[]>(this.olympicUrl).pipe(
       map((countries) => countries.find((country) => country.id === countryId)),
       catchError((error, caught) => {
-        console.error(error);
-        return of(undefined);
+        console.error(error)
+        return of(undefined)
       })
     );
   }
