@@ -1,5 +1,5 @@
-import { Component, OnInit }     from '@angular/core'
-import { filter, take, of }      from 'rxjs'
+import { Component, OnInit, OnDestroy }     from '@angular/core'
+import { filter, take, of, Subscription }      from 'rxjs'
 import { OlympicService }        from './core/services/olympic.service'
 import { Router, NavigationEnd } from '@angular/router'
 import { DataCard }              from './core/models/DataCard'
@@ -13,11 +13,13 @@ import { CardFactoryService }    from './core/services/card-factory.service'
   styleUrls  : ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  showDetail   : boolean    = false
-  cardTitle    : string     = 'Medals per country'
-  dataCards    : DataCard[] = []
-  error        : string     = ''
-  
+  public  showDetail   : boolean    = false
+  public  cardTitle    : string     = 'Medals per country'
+  public  dataCards    : DataCard[] = []
+  public  error        : string     = ''
+  private olympicSubscription: Subscription | undefined = undefined
+  private routerSubscription : Subscription | undefined = undefined
+
   constructor(
     private router            : Router, 
     private olympicService    : OlympicService,
@@ -27,15 +29,24 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.loadOlympicData()
 
-    this.router.events.pipe(
+    this.routerSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.loadOlympicData()
     })
   }
 
+  ngOnDestroy(): void {
+    if (this.olympicSubscription) {
+      this.olympicSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
   private loadOlympicData(): void {
-    this.olympicService.loadInitialData().pipe(take(1)).subscribe(
+    this.olympicSubscription = this.olympicService.loadInitialData().pipe(take(1)).subscribe(
       (olympics) => {
         if (olympics) {
           this.updateDataCards(olympics);

@@ -1,7 +1,8 @@
 import { Component, 
          EventEmitter, 
          OnInit, 
-         Output }                 from '@angular/core'
+         Output,
+         OnDestroy }              from '@angular/core'
 import { CommonModule }           from '@angular/common'
 import { LineChartComponent }     from 'src/app/line-chart/line-chart.component'
 import { TitleCardComponent }     from 'src/app/title-card/title-card.component'
@@ -13,6 +14,7 @@ import { Country }                from 'src/app/core/models/Country'
 import { Participation }          from 'src/app/core/models/Participation'
 import { DataCard }               from 'src/app/core/models/DataCard'
 import { LineChartData }          from 'src/app/core/models/LineChartData'
+import { Subscription }           from 'rxjs'
 
 @Component({
   selector  : 'app-detail',
@@ -28,12 +30,13 @@ import { LineChartData }          from 'src/app/core/models/LineChartData'
   providers  : [DetailService]
 })
 export class DetailComponent implements OnInit {
-  @Output() back         : EventEmitter<void> = new EventEmitter<void>()
-  public    countryName  : string             = null!
-  public    dataCards    : DataCard[]         = []
-  public    dataLoaded   : boolean            = false
-  private   countryId    : number | null      = null
-  public    lineChartData: LineChartData[]    = []
+  @Output() back                : EventEmitter<void>       = new EventEmitter<void>()
+  public    countryName         : string                   = null!
+  public    dataCards           : DataCard[]               = []
+  public    dataLoaded          : boolean                  = false
+  private   countryId           : number | null            = null
+  public    lineChartData       : LineChartData[]          = []
+  private   paramMapSubscription: Subscription | undefined = undefined
   
   constructor(
     private route          : ActivatedRoute, 
@@ -42,10 +45,16 @@ export class DetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.paramMapSubscription = this.route.paramMap.subscribe(params => {
       this.countryId = +params.get('id')!
       this.loadCountryData()
-    });
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramMapSubscription) {
+      this.paramMapSubscription.unsubscribe();
+    }
   }
 
   private loadCountryData(): void {
@@ -55,9 +64,9 @@ export class DetailComponent implements OnInit {
         if (country) {
           this.countryName = country.country
           const transformedData = this.detailService.formatCountryData(country)
-          this.dataCards = transformedData.dataCards
-          this.lineChartData = transformedData.lineChartData
-          this.dataLoaded = true;
+          this.dataCards        = transformedData.dataCards
+          this.lineChartData    = transformedData.lineChartData
+          this.dataLoaded       = true;
         }
       })
     }
