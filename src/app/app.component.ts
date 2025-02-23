@@ -1,12 +1,11 @@
-import { Component, OnInit }     from '@angular/core';
-import { filter, take, of }      from 'rxjs';
-import { OlympicService }        from './core/services/olympic.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { DataCard }              from './core/models/DataCard';
-import { Participation }         from './core/models/Participation';
-import { Olympic }               from './core/models/Olympic';
-import { catchError }            from 'rxjs/operators';
-import { CardFactoryService }    from './core/services/card-factory.service';
+import { Component, OnInit }     from '@angular/core'
+import { filter, take, of }      from 'rxjs'
+import { OlympicService }        from './core/services/olympic.service'
+import { Router, NavigationEnd } from '@angular/router'
+import { DataCard }              from './core/models/DataCard'
+import { Olympic }               from './core/models/Olympic'
+import { catchError }            from 'rxjs/operators'
+import { CardFactoryService }    from './core/services/card-factory.service'
 
 @Component({
   selector   : 'app-root',
@@ -18,7 +17,6 @@ export class AppComponent implements OnInit {
   cardTitle    : string     = 'Medals per country'
   dataCards    : DataCard[] = []
   error        : string     = ''
-  participation: Participation | undefined
   
   constructor(
     private router            : Router, 
@@ -27,39 +25,28 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.olympicService.loadInitialData().pipe(
-      take(1),
-      catchError((error: string, caught: any) => {
-        console.error(error);
-        this.error = error;
-        this.olympicService.setOlympicsData(null)
-        return of(null)
-      })
-    ).subscribe((olympics) => {
-      this.updateCardTitle()
-      if (olympics) {
-        this.updateDataCards(olympics)
-      }
-    });
+    this.loadOlympicData()
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      this.updateCardTitle()
-      this.olympicService.getOlympics().pipe(take(1)).subscribe(olympics => {
-        if (olympics) {
-          this.updateDataCards(olympics)
-        }
-      })
+      this.loadOlympicData()
     })
   }
 
-  private updateCardTitle(): void {
-    if (this.router.url === '/') {
-      this.cardTitle = 'Medals per country'
-    } else {
-      this.cardTitle = 'Name of the country'
-    }
+  private loadOlympicData(): void {
+    this.olympicService.loadInitialData().pipe(take(1)).subscribe(
+      (olympics) => {
+        if (olympics) {
+          this.updateDataCards(olympics);
+        }
+      },
+      (error) => {
+        console.error(error);
+        this.error = 'Failed to load Olympic data'
+        this.olympicService.setOlympicsData(null)
+      }
+    )
   }
 
   private updateDataCards(olympics: Olympic[]): void {

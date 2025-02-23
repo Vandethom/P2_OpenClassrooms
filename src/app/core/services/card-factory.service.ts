@@ -1,7 +1,8 @@
-import { Injectable }    from '@angular/core';
-import { Olympic }       from '../models/Olympic';
-import { Participation } from '../models/Participation';
-import { DataCard }      from '../models/DataCard';
+import { Injectable }    from '@angular/core'
+import { Olympic }       from '../models/Olympic'
+import { Participation } from '../models/Participation'
+import { DataCard }      from '../models/DataCard'
+import { PieChartData }  from '../models/PieChartData'
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class CardFactoryService {
 
     return [
       { name: 'Number of JOs',       value: distinctYears.size },
-      { name: 'Number of Countries', value: olympics.length },
+      { name: 'Number of Countries', value: olympics.length    },
     ]
   }
 
@@ -44,5 +45,16 @@ export class CardFactoryService {
     } else {
       return []
     }
+  }
+
+  getPieChartData(olympics: Olympic[]): PieChartData[] {
+    return olympics.map(country => ({
+      name : country.country,
+      value: country.participations.reduce(
+        (sum: number, participation: { medalsCount: number }) => sum + participation.medalsCount,
+        0
+      ),
+      id: country.id
+    }))
   }
 }

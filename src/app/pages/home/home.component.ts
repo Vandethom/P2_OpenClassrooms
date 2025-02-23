@@ -10,6 +10,7 @@ import { Olympic }            from 'src/app/core/models/Olympic'
 import { Country }            from 'src/app/core/models/Country'
 import { DataCard }           from 'src/app/core/models/DataCard'
 import { PieChartData }       from 'src/app/core/models/PieChartData'
+import { CardFactoryService } from 'src/app/core/services/card-factory.service'
 
 @Component({
   selector  : 'app-home',
@@ -32,32 +33,23 @@ export class HomeComponent implements OnInit {
   public cardTitle   : string                       = 'Medals per country'
 
   constructor(
-    private router: Router,
-    private olympicService: OlympicService
+    private router            : Router,
+    private olympicService    : OlympicService,
+    private cardFactoryService: CardFactoryService
   ) { }
 
   ngOnInit(): void {
     this.olympics$.subscribe(olympics => {
       if (olympics) {
-        this.olympicsData = olympics;
-        this.dataCards = [
-          { name: 'Number of JOs', value: this.olympicService.getNumberOfJos() },
-          { name: 'Number of Countries', value: this.olympicService.getNumberOfCountries() }
-        ];
-        this.pieChartData = this.olympicsData.map(country => ({
-          name: country.country,
-          value: country.participations.reduce(
-            (sum: number, participation: { medalsCount: number }) => sum + participation.medalsCount,
-            0
-          ),
-          id: country.id
-        }))
-        this.dataLoaded = true;
+        this.olympicsData = olympics
+        this.dataCards = this.cardFactoryService.getDataCardsForHome(olympics)
+        this.pieChartData = this.cardFactoryService.getPieChartData(olympics)
+        this.dataLoaded = true
       }
-    });
+    })
   }
 
   onCountrySelected(countryId: number): void {
-    this.router.navigate([`/detail/${countryId}`]);
+    this.router.navigate([`/detail/${countryId}`])
   }
 }
