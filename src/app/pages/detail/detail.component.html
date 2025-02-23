@@ -1,4 +1,8 @@
 <app-title-card [title]="countryName"></app-title-card>
+<button class="return-button" 
+        (click)="goBack()">
+        Return
+</button>
 <div class="data-card-container">
   <app-data-card *ngFor="let card of dataCards" 
                  [name]="card.name" 
@@ -8,7 +12,3 @@
 <app-line-chart [data]="lineChartData" 
                 *ngIf="dataLoaded" 
                 />
-<button class="return-button" 
-        (click)="goBack()">
-        Return
-      </button>

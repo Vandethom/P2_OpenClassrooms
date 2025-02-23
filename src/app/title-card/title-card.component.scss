@@ -1,11 +1,15 @@
 .title-card {
     margin          : 0 auto;
-    border-radius   : 6px;
-    background-color: #008080;
+    border-radius   : 12px;
+    border          : none;
+    background-color: #04838f;
     color           : white;
-    padding         : 8px;
-    width           : 270px;
-    height          : 75px;
+    width           : 310px;
+    height          : 55px;
     font-size       : 16px;
-    text-align      : center;
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    font-family     : 'Roboto', sans-serif;
+    font-size       : 30px;
 }

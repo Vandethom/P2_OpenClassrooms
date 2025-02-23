@@ -1,5 +1,7 @@
-<app-title-card [title]="cardTitle"></app-title-card>
-<div class="data-card-container">
-  <app-data-card *ngFor="let card of dataCards" [name]="card.name" [value]="card.value"></app-data-card>
+<div class="page-container">
+  <app-title-card [title]="cardTitle"></app-title-card>
+  <div class="data-card-container">
+    <app-data-card *ngFor="let card of dataCards" [name]="card.name" [value]="card.value"></app-data-card>
+  </div>
+  <app-pie-chart [data]="pieChartData" *ngIf="dataLoaded" (select)="onCountrySelected($event)"></app-pie-chart>
 </div>
-<app-pie-chart [data]="pieChartData" *ngIf="dataLoaded" (select)="onCountrySelected($event)"></app-pie-chart>
