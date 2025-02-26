@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy }     from '@angular/core'
-import { filter, take, of, Subscription }      from 'rxjs'
+import { filter, take, of, Subscription }   from 'rxjs'
 import { OlympicService }        from './core/services/olympic.service'
 import { Router, NavigationEnd } from '@angular/router'
 import { DataCard }              from './core/models/DataCard'
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
   private updateDataCards(olympics: Olympic[]): void {
     if (this.router.url === '/') {
       this.dataCards = this.cardFactoryService.getDataCardsForHome(olympics)
-    } else if (this.router.url.includes('/detail')) {
+    } else if (this.router.url.includes('/s')) {
       const countryId = parseInt(this.router.url.split('/')[2], 10)
       this.dataCards  = this.cardFactoryService.getDataCardsForDetail(olympics, countryId)
     } else {
@@ -72,6 +72,6 @@ export class AppComponent implements OnInit {
   }
 
   onCountrySelected(countryId: number): void {
-    this.router.navigate([`/detail/${countryId}`])
+    this.router.navigate([`/details/${countryId}`])
   }
 }

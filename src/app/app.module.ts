@@ -9,7 +9,7 @@ import { TitleCardComponent }      from "./title-card/title-card.component"
 import { DataCardComponent }       from './data-card/data-card.component'
 import { PieChartComponent }       from './pie-chart/pie-chart.component'
 import { LineChartComponent }      from './line-chart/line-chart.component'
-import { DetailComponent }         from "./pages/detail/detail.component"
+import { DetailComponent }         from "./pages/details/details.component"
 
 @NgModule({
   declarations: [

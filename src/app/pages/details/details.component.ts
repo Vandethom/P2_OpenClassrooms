@@ -25,8 +25,8 @@ import { Subscription }           from 'rxjs'
     TitleCardComponent, 
     DataCardComponent
   ],
-  templateUrl: './detail.component.html',
-  styleUrls  : ['./detail.component.scss'],
+  templateUrl: './details.component.html',
+  styleUrls  : ['./details.component.scss'],
   providers  : [DetailService]
 })
 export class DetailComponent implements OnInit {

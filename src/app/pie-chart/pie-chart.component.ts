@@ -27,7 +27,7 @@ import { LegendPosition }           from '@swimlane/ngx-charts'
 export class PieChartComponent implements OnInit {
   @Input()  data   : PieChartData[]       = []
   @Output() select : EventEmitter<number> = new EventEmitter<number>()
-  legendPosition: LegendPosition = LegendPosition.Right
+  legendPosition   : LegendPosition = LegendPosition.Right
 
   constructor() { }
 

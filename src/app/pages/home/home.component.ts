@@ -57,6 +57,6 @@ export class HomeComponent implements OnInit {
   }
 
   onCountrySelected(countryId: number): void {
-    this.router.navigate([`/detail/${countryId}`])
+    this.router.navigate([`/details/${countryId}`])
   }
 }
